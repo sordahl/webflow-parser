@@ -1,0 +1,17 @@
+{
+    "name": "sordahl/webflow-parser",
+    "description": "Webflow site parser to static html with local assets",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Sordahl\\WebflowParser\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Morten Sordahl",
+            "email": "morten@sordahl.dk"
+        }
+    ],
+    "require": {}
+}
