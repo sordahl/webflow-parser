@@ -1,5 +1,5 @@
 <?php
-namespace webflow;
+namespace sordahl\webflow;
 
 class webflow {
     protected static string $url;
