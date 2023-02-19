@@ -1,7 +1,7 @@
 <?php
-namespace sordahl\webflow;
+namespace Sordahl\WebflowParser;
 
-class webflow {
+class WebflowParser {
     protected static string $url;
     protected static string $site;
     protected static array $contextOptions = ["ssl" => ["verify_peer" => false, "verify_peer_name" => false]];
