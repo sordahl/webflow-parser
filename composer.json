@@ -4,8 +4,11 @@
   "type": "library",
   "autoload": {
     "psr-4": {
-      "Sordahl\\WebflowParser\\": "src/"
-    }
+      "Sordahl\\WebflowParser\\": "src"
+    },
+    "classmap": [
+      "src"
+    ]
   },
   "authors": [
     {
