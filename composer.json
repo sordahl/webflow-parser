@@ -1,7 +1,7 @@
 {
   "name": "sordahl/webflow-parser",
   "description": "Webflow site parser to static html with local assets",
-  "type": "package",
+  "type": "library",
   "autoload": {
     "psr-4": {
       "Sordahl\\WebflowParser\\": "src/"
