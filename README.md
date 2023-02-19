@@ -1,5 +1,37 @@
 # webflow-parser
+
 Parse any Webflow site
 
-## Autoload bug  
-use `require 'vendor/sordahl/webflow-parser/src/WebflowParser.php';` instead of autoload
+## Installation
+
+Copy this to `composer.json`
+
+```
+{
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "sordahl/webflow-parser",
+        "version": "1.0.0",
+        "source": {
+          "url": "https://github.com/sordahl/webflow-parser.git",
+          "type": "git",
+          "reference": "master"
+        },
+        "autoload": {
+          "classmap": [
+            "src/"
+          ]
+        }
+      }
+    }
+  ],
+  "require": {
+    "sordahl/webflow-parser": "*"
+  },
+  "config": {
+    "optimize-autoloader": true
+  }
+}
+```

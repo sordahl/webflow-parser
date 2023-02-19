@@ -5,10 +5,7 @@
   "autoload": {
     "psr-4": {
       "Sordahl\\WebflowParser\\": "src"
-    },
-    "classmap": [
-      "src"
-    ]
+    }
   },
   "authors": [
     {
@@ -17,7 +14,8 @@
     }
   ],
   "require": {
-    "php": ">7.0"
+    "php": ">8.0",
+    "ext-zlib": "*"
   },
   "minimum-stability": "dev"
 }
