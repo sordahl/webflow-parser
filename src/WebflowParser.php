@@ -1,7 +1,9 @@
 <?php
+
 namespace Sordahl\WebflowParser;
 
-class WebflowParser {
+class WebflowParser
+{
     protected static string $url;
     protected static string $site;
     protected static array $contextOptions = ["ssl" => ["verify_peer" => false, "verify_peer_name" => false]];
@@ -28,60 +30,7 @@ class WebflowParser {
         self::recursiveParsePages();
 
         print PHP_EOL;
-        print 'Completed; ' . (sizeof(self::$linksCrawled)+1) . ' pages crawled' . PHP_EOL;
-    }
-
-    public static function recursiveParsePages($depth=0): void
-    {
-        if ($depth >= self::$maxDepth) {
-            print '<- max depth reached' . PHP_EOL;
-            exit;
-        }
-        foreach(self::$links AS $page) {
-            if (!in_array($page, self::$linksCrawled)) {
-                print '-> Scraping: ' . $page . PHP_EOL;
-                $newPage = self::$url .'/' . $page;
-                $htmlRaw = self::getHtmlContent($newPage);
-                $htmlRaw = self::cleanup_html($htmlRaw);
-                $htmlRaw = self::downloadExternalAssets($htmlRaw);
-                $filename = self::renameLink($page);
-                self::getLinks($htmlRaw);
-                print '<- Saving file: ' . $filename . PHP_EOL;
-                file_put_contents('dist/' . $filename, $htmlRaw);
-                self::$linksCrawled[] = $page;
-
-                print '<- Scraping done (' . $page . ')' . PHP_EOL;
-            }
-        }
-
-        foreach(self::$links AS $link)
-            if (!in_array($link, self::$linksCrawled)) {
-                self::recursiveParsePages($depth++);
-                break;
-            }
-    }
-
-    public static function renameLink($link): string
-    {
-        return str_replace('/','_', $link) . '.html';
-    }
-
-    public static function getLinks(&$htmlRaw): void
-    {
-        $pattern = '(?:<a(?:.*?)href=\"\/)((?:[a-zA-Z])(?:.*?))(?:\"| )';
-        preg_match_all('/'.$pattern.'/', $htmlRaw, $linkList, PREG_PATTERN_ORDER);
-
-        foreach(array_unique(array_filter($linkList[1])) AS $link) {
-            if (!in_array($link, self::$links))
-                self::$links[] = $link;
-
-            $link = trim($link, '/');
-            //Rename links to local dist folder
-            //print '<- rename link: /' . $link . ' ->' . self::renameLink($link) . PHP_EOL;
-            $htmlRaw = str_replace('/' . $link .'"', self::renameLink($link) . '"', $htmlRaw);
-        }
-
-        $htmlRaw = str_replace('href="/"','href="./index.html"', $htmlRaw);
+        print 'Completed; ' . (sizeof(self::$linksCrawled) + 1) . ' pages crawled' . PHP_EOL;
     }
 
     private static function checkFolder($folder): void
@@ -115,7 +64,7 @@ class WebflowParser {
             $htmlRaw = preg_replace($pattern, '', $htmlRaw);
 
         //Remove badge
-        $htmlRaw = str_replace('data-wf-domain="'.self::$site.'"','data-wf-domain="smalltasty.dk"',$htmlRaw);
+        $htmlRaw = str_replace('data-wf-domain="' . self::$site . '"', 'data-wf-domain="smalltasty.dk"', $htmlRaw);
         //$htmlRaw = preg_replace('/<a class=\"w-webflow-badge\"(.*)<\/a>/', '', $htmlRaw);
 
         return $htmlRaw;
@@ -127,26 +76,34 @@ class WebflowParser {
         $pattern = '(https:\/\/(?:uploads-ssl.webflow.com)\/(?:.*?))(?:\"| )';
         //$pattern = '(https:\/\/(?:.*?))(?:\"| )';
         //$pattern = '(https:\/\/(?:.*?)\/(?:.*?)\.(?:.*?))(?:\"| )';
-        preg_match_all('/'.$pattern.'/', $htmlRaw, $fileList, PREG_PATTERN_ORDER);
+        preg_match_all('/' . $pattern . '/', $htmlRaw, $fileList, PREG_PATTERN_ORDER);
 
         //Clean-up fileList in to $files array.
         foreach ($fileList[1] as $file)
             if (!str_contains($file, ','))
-                $files[] = str_replace(['"','&quot;)'], '', $file);
+                $files[] = str_replace(['"', '&quot;)'], '', $file);
 
         if (empty($files))
             return false;
 
         foreach ($files as $file) {
             $filename = explode('/', $file);
-            $filename = str_replace(array(' ','%20','(',')','webflow', 'sordahl'), '', end($filename));
+            $filename = str_replace(array(' ', '%20', '(', ')', 'webflow', 'sordahl'), '', end($filename));
             $filename = trim($filename, '. ');
-
 
             if (!file_exists('dist/assets/' . $filename)) {
                 print '<- Downloading: ' . $file . ' -> dist/assets/' . $filename;
+
                 $fileContent = file_get_contents($file, false, stream_context_create(self::$contextOptions));
-                if (in_array('Content-Encoding: gzip', $http_response_header)) $fileContent = gzdecode($fileContent);
+
+                if (in_array('Content-Encoding: gzip', $http_response_header))
+                    $fileContent = gzdecode($fileContent);
+
+                if (pathinfo($filename, PATHINFO_EXTENSION) === 'css') {
+                    print '<- Parser stylesheet ' . $filename . ' for external resources' . PHP_EOL;
+                    $fileContent = self::downloadExternalAssets($fileContent);
+                }
+
                 file_put_contents('dist/assets/' . $filename, $fileContent);
                 print ' OK' . PHP_EOL;
             }
@@ -155,6 +112,59 @@ class WebflowParser {
         }
 
         return $htmlRaw;
+    }
+
+    public static function getLinks(&$htmlRaw): void
+    {
+        $pattern = '(?:<a(?:.*?)href=\"\/)((?:[a-zA-Z])(?:.*?))(?:\"| )';
+        preg_match_all('/' . $pattern . '/', $htmlRaw, $linkList, PREG_PATTERN_ORDER);
+
+        foreach (array_unique(array_filter($linkList[1])) as $link) {
+            if (!in_array($link, self::$links))
+                self::$links[] = $link;
+
+            $link = trim($link, '/');
+            //Rename links to local dist folder
+            //print '<- rename link: /' . $link . ' ->' . self::renameLink($link) . PHP_EOL;
+            $htmlRaw = str_replace('/' . $link . '"', self::renameLink($link) . '"', $htmlRaw);
+        }
+
+        $htmlRaw = str_replace('href="/"', 'href="./index.html"', $htmlRaw);
+    }
+
+    public static function renameLink($link): string
+    {
+        return str_replace('/', '_', $link) . '.html';
+    }
+
+    public static function recursiveParsePages($depth = 0): void
+    {
+        if ($depth >= self::$maxDepth) {
+            print '<- max depth reached' . PHP_EOL;
+            exit;
+        }
+        foreach (self::$links as $page) {
+            if (!in_array($page, self::$linksCrawled)) {
+                print '-> Scraping: ' . $page . PHP_EOL;
+                $newPage = self::$url . '/' . $page;
+                $htmlRaw = self::getHtmlContent($newPage);
+                $htmlRaw = self::cleanup_html($htmlRaw);
+                $htmlRaw = self::downloadExternalAssets($htmlRaw);
+                $filename = self::renameLink($page);
+                self::getLinks($htmlRaw);
+                print '<- Saving file: ' . $filename . PHP_EOL;
+                file_put_contents('dist/' . $filename, $htmlRaw);
+                self::$linksCrawled[] = $page;
+
+                print '<- Scraping done (' . $page . ')' . PHP_EOL;
+            }
+        }
+
+        foreach (self::$links as $link)
+            if (!in_array($link, self::$linksCrawled)) {
+                self::recursiveParsePages($depth++);
+                break;
+            }
     }
 
 }
