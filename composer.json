@@ -1,18 +1,19 @@
 {
-    "name": "sordahl/webflow-parser",
-    "description": "Webflow site parser to static html with local assets",
-    "type": "package",
-"autoload": {
-        "classmap": ["src/"],
-        "files": ["src/WebflowParser.php"]
-    },    
-"authors": [
-        {
-            "name": "Morten Sordahl",
-            "email": "morten@sordahl.dk"
-        }
-    ],
-    "require": {
-        "php": ">7.0"
+  "name": "sordahl/webflow-parser",
+  "description": "Webflow site parser to static html with local assets",
+  "type": "package",
+  "autoload": {
+    "psr-4": {
+      "Sordahl\\WebflowParser\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Morten Sordahl",
+      "email": "morten@sordahl.dk"
+    }
+  ],
+  "require": {
+    "php": ">7.0"
+  }
 }
