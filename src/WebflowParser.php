@@ -92,7 +92,7 @@ class WebflowParser
             $filename = trim($filename, '. ');
 
             if (!file_exists('dist/assets/' . $filename)) {
-                print '<- Downloading: ' . $file . ' -> dist/assets/' . $filename;
+                print '<- Downloading: ' . $file . ' -> dist/assets/' . $filename . PHP_EOL;
 
                 $fileContent = file_get_contents($file, false, stream_context_create(self::$contextOptions));
 
@@ -101,7 +101,7 @@ class WebflowParser
 
                 if (pathinfo($filename, PATHINFO_EXTENSION) === 'css') {
                     print '<- Parser stylesheet ' . $filename . ' for external resources' . PHP_EOL;
-                    $fileContent = self::downloadExternalAssets($fileContent);
+                    self::downloadExternalAssets($fileContent);
                 }
 
                 file_put_contents('dist/assets/' . $filename, $fileContent);
