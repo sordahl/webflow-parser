@@ -6,14 +6,16 @@ class WebflowParser
 {
     protected static string $url;
     protected static string $site;
+    protected static string $host;
     protected static array $contextOptions = ["ssl" => ["verify_peer" => false, "verify_peer_name" => false]];
     private static int $maxDepth = 5;
     private static array $links = [];
     private static array $linksCrawled = [];
 
-    public function __construct($site, $host, $filename = 'index.html')
+    public function __construct(string $site, string $host, $filename = 'index.html')
     {
-        self::$site = $host ?? $site;
+        self::$site = $site;
+        self::$host = $host ?? $site;
         self::$url = 'https://' . $site;
         print '-> Init scraping: ' . self::$url . PHP_EOL;
         self::checkFolder('dist');
