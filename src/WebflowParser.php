@@ -11,7 +11,7 @@ class WebflowParser
     private static array $links = [];
     private static array $linksCrawled = [];
 
-    public function __construct($site)
+    public function __construct($site, $filename = 'index.html')
     {
         self::$site = $site;
         self::$url = 'https://' . $site;
@@ -25,7 +25,7 @@ class WebflowParser
         self::getLinks($htmlRaw);
         $htmlRaw = str_replace(array("    " . PHP_EOL, PHP_EOL), "", $htmlRaw);
 
-        file_put_contents('dist/index.html', $htmlRaw);
+        file_put_contents('dist/' . $filename, $htmlRaw);
 
         self::recursiveParsePages();
 
