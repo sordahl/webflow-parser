@@ -14,7 +14,7 @@ class WebflowParser
 
     public function __construct(string $site, string $host, $filename = 'index.html')
     {
-        self::$site = $site;
+        self::$site = str_contains($site, '/') ? explode('/', $site)[0] : $site;
         self::$host = $host ?? $site;
         self::$url = 'https://' . $site;
         print '-> Init scraping: ' . self::$url . PHP_EOL;
