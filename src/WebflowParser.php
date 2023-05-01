@@ -64,7 +64,7 @@ class WebflowParser
             $htmlRaw = preg_replace($pattern, '', $htmlRaw);
 
         //Remove badge
-        $htmlRaw = str_replace('data-wf-domain="' . self::$site . '"', 'data-wf-domain="smalltasty.dk"', $htmlRaw);
+        $htmlRaw = str_replace('data-wf-domain="' . self::$site . '"', 'data-wf-domain="' . self::$site . '"', $htmlRaw);
         //$htmlRaw = preg_replace('/<a class=\"w-webflow-badge\"(.*)<\/a>/', '', $htmlRaw);
 
         return $htmlRaw;
