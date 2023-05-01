@@ -11,9 +11,9 @@ class WebflowParser
     private static array $links = [];
     private static array $linksCrawled = [];
 
-    public function __construct($site, $filename = 'index.html')
+    public function __construct($site, $host, $filename = 'index.html')
     {
-        self::$site = $site;
+        self::$site = $host ?? $site;
         self::$url = 'https://' . $site;
         print '-> Init scraping: ' . self::$url . PHP_EOL;
         self::checkFolder('dist');
@@ -64,7 +64,7 @@ class WebflowParser
             $htmlRaw = preg_replace($pattern, '', $htmlRaw);
 
         //Remove badge
-        $htmlRaw = str_replace('data-wf-domain="' . self::$site . '"', 'data-wf-domain="' . self::$site . '"', $htmlRaw);
+        $htmlRaw = str_replace('data-wf-domain="' . self::$site . '"', 'data-wf-domain="' . self::$host . '"', $htmlRaw);
         //$htmlRaw = preg_replace('/<a class=\"w-webflow-badge\"(.*)<\/a>/', '', $htmlRaw);
 
         return $htmlRaw;
