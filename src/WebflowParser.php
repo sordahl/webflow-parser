@@ -4,6 +4,7 @@ namespace Sordahl\WebflowParser;
 
 class WebflowParser
 {
+    public static string $linkExtension = '.html';
     protected static string $url;
     protected static string $site;
     protected static string $host;
@@ -90,7 +91,7 @@ class WebflowParser
 
         foreach ($files as $file) {
             $filename = explode('/', $file);
-            $filename = str_replace(array(' ', '%20', '(', ')', 'webflow', 'sordahl'), '', end($filename));
+            $filename = str_replace(array(' ', '%20', '%40', '(', ')', 'webflow', 'sordahl'), '', end($filename));
             $filename = trim($filename, '. ');
 
             if (!file_exists('dist/assets/' . $filename)) {
@@ -131,12 +132,12 @@ class WebflowParser
             $htmlRaw = str_replace('/' . $link . '"', self::renameLink($link) . '"', $htmlRaw);
         }
 
-        $htmlRaw = str_replace('href="/"', 'href="./index.html"', $htmlRaw);
+        $htmlRaw = str_replace('href="/"', 'href="./index' . self::$linkExtension . '"', $htmlRaw);
     }
 
     public static function renameLink($link): string
     {
-        return str_replace('/', '_', $link) . '.html';
+        return str_replace('/', '_', $link) . self::$linkExtension;
     }
 
     public static function recursiveParsePages($depth = 0): void
