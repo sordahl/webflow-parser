@@ -5,6 +5,7 @@ namespace Sordahl\WebflowParser;
 class WebflowParser
 {
     public static string $linkExtension = '.html';
+		public static bool $configRemoveLinebreak = false;
     protected static string $url;
     protected static string $site;
     protected static string $host;
@@ -27,7 +28,7 @@ class WebflowParser
         $htmlRaw = self::cleanup_html($htmlRaw);
         $htmlRaw = self::downloadExternalAssets($htmlRaw);
         self::getLinks($htmlRaw);
-        $htmlRaw = str_replace(array("    " . PHP_EOL, PHP_EOL), "", $htmlRaw);
+        if (self::$configRemoveLinebreak) $htmlRaw = str_replace(array("    " . PHP_EOL, PHP_EOL), "", $htmlRaw);
 
         file_put_contents('dist/' . $filename . self::$linkExtension, $htmlRaw);
 
