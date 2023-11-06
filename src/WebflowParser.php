@@ -21,7 +21,7 @@ class WebflowParser
     {
 				if (is_link($_SERVER['SCRIPT_FILENAME'])) {
 					print '-> running from symlinked file' . PHP_EOL;
-					self::$dist = './';
+					self::$dist = rtrim($_SERVER['PWD'],'/dist');
 				}
 
         self::$linkExtension = self::$extension;
