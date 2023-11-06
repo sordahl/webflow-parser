@@ -132,8 +132,6 @@ class WebflowParser
             $htmlRaw = str_replace($file, './assets/' . $filename, $htmlRaw);
         }
 
-				print $htmlRaw;
-
         return $htmlRaw;
     }
 
