@@ -41,6 +41,7 @@ class WebflowParser
 
 				$htmlRaw = self::getHtmlContent(self::$url);
 				$htmlRaw = self::cleanup_html($htmlRaw);
+				print '<- html size: ' . strlen($htmlRaw) . PHP_EOL;
 				$htmlRaw = self::downloadExternalAssets($htmlRaw);
 
 				self::getLinks($htmlRaw);
@@ -107,8 +108,10 @@ class WebflowParser
 						if (!str_contains($file, ','))
 								$files[] = str_replace(['"', '&quot;)'], '', $file);
 
+				print '<- external fiiles: ' . sizeof($files) . PHP_EOL;
+				
 				if (empty($files))
-						return false;
+						return $htmlRaw;
 
 				foreach ($files as $file) {
 						$filename = explode('/', $file);
