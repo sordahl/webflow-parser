@@ -38,7 +38,8 @@ class WebflowParser
 
         $htmlRaw = self::getHtmlContent(self::$url);
         $htmlRaw = self::cleanup_html($htmlRaw);
-        self::downloadExternalAssets($htmlRaw);
+        $htmlRaw = self::downloadExternalAssets($htmlRaw);
+				exit;
         self::getLinks($htmlRaw);
         if (self::$configRemoveLinebreak) $htmlRaw = str_replace(array("    " . PHP_EOL, PHP_EOL), "", $htmlRaw);
 
@@ -93,7 +94,7 @@ class WebflowParser
     public static function downloadExternalAssets($htmlRaw)
     {
         $files = [];
-        $pattern = '(https:\/\/(?:uploads-ssl.webflow.com)\/(?:.*?))(?:\"| )';
+        $pattern = '(https:\/\/(?:assets-global.website-files.com)\/(?:.*?))(?:\"| )';
         //$pattern = '(https:\/\/(?:.*?))(?:\"| )';
         //$pattern = '(https:\/\/(?:.*?)\/(?:.*?)\.(?:.*?))(?:\"| )';
         preg_match_all('/' . $pattern . '/', $htmlRaw, $fileList, PREG_PATTERN_ORDER);
@@ -130,6 +131,8 @@ class WebflowParser
 
             $htmlRaw = str_replace($file, './assets/' . $filename, $htmlRaw);
         }
+
+				print $htmlRaw;
 
         return $htmlRaw;
     }
@@ -169,7 +172,7 @@ class WebflowParser
                 $newPage = self::$url . '/' . $page;
                 $htmlRaw = self::getHtmlContent($newPage);
                 $htmlRaw = self::cleanup_html($htmlRaw);
-                self::downloadExternalAssets($htmlRaw);
+                $htmlRaw = self::downloadExternalAssets($htmlRaw);
                 $filename = self::renameLink($page);
                 self::getLinks($htmlRaw);
                 print '<- Saving file: ' . $filename . PHP_EOL;
