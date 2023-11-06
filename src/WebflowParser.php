@@ -15,10 +15,15 @@ class WebflowParser
     private static array $linksCrawled = [];
 		public static $filename = 'index';
 		public static $extension = '.html';
-		public static $dist = 'dist';
+		public static $dist = '/dist';
 
     public function __construct(string $site, string $host)
     {
+				if (is_link($_SERVER['SCRIPT_FILENAME'])) {
+					print '-> running from symlinked file' . PHP_EOL;
+					self::$dist = './';
+				}
+
         self::$linkExtension = self::$extension;
         self::$site = str_contains($site, '/') ? explode('/', $site)[0] : $site;
         self::$host = $host ?? $site;
@@ -33,7 +38,7 @@ class WebflowParser
         self::getLinks($htmlRaw);
         if (self::$configRemoveLinebreak) $htmlRaw = str_replace(array("    " . PHP_EOL, PHP_EOL), "", $htmlRaw);
 
-        file_put_contents('dist/' . self::$filename . self::$linkExtension, $htmlRaw);
+        file_put_contents(self::$dist . self::$filename . self::$linkExtension, $htmlRaw);
 
         self::recursiveParsePages();
 
@@ -101,8 +106,8 @@ class WebflowParser
             $filename = str_replace(array(' ', '%20', '%40', '(', ')', 'webflow', 'sordahl'), '', end($filename));
             $filename = trim($filename, '. ');
 
-            if (!file_exists('dist/assets/' . $filename)) {
-                print '<- Downloading: ' . $file . ' -> dist/assets/' . $filename . PHP_EOL;
+            if (!file_exists(self::$dist . '/assets/' . $filename)) {
+                print '<- Downloading: ' . $file . ' -> '.self::$dist . '/assets/' . $filename . PHP_EOL;
 
                 $fileContent = file_get_contents($file, false, stream_context_create(self::$contextOptions));
 
@@ -114,7 +119,7 @@ class WebflowParser
                     self::downloadExternalAssets($fileContent);
                 }
 
-                file_put_contents('dist/assets/' . $filename, $fileContent);
+                file_put_contents(self::$dist . '/assets/' . $filename, $fileContent);
                 print ' OK' . PHP_EOL;
             }
 
@@ -163,7 +168,7 @@ class WebflowParser
                 $filename = self::renameLink($page);
                 self::getLinks($htmlRaw);
                 print '<- Saving file: ' . $filename . PHP_EOL;
-                file_put_contents('dist/' . $filename, $htmlRaw);
+                file_put_contents(self::$dist . '/' . $filename, $htmlRaw);
                 self::$linksCrawled[] = $page;
 
                 print '<- Scraping done (' . $page . ')' . PHP_EOL;
