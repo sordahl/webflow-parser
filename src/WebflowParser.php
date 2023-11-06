@@ -29,6 +29,7 @@ class WebflowParser
 		{
 				//Set absolute dist path
 				self::$dist = self::getAbsolutePath() . DIRECTORY_SEPARATOR . self::$dist;
+				print '<- absolute path: ' . self::$dist . PHP_EOL;
 				
 				self::$linkExtension = self::$extension;
 				self::$site = str_contains($site, '/') ? explode('/', $site)[0] : $site;
