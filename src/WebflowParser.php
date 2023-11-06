@@ -98,7 +98,8 @@ class WebflowParser
 		public static function downloadExternalAssets($htmlRaw)
 		{
 				$files = [];
-				$pattern = '(https:\/\/(?:assets-global.website-files.com)\/(?:.*?))(?:\"| )';
+				//$pattern = '(https:\/\/(?:assets-global.website-files.com)\/(?:.*?))(?:\"| )';
+				$pattern = 'https:\/\/[^"]*\/[^"]*\.[^"]+'; //must contain / after domain and punctuation (ext)
 				//$pattern = '(https:\/\/(?:.*?))(?:\"| )';
 				//$pattern = '(https:\/\/(?:.*?)\/(?:.*?)\.(?:.*?))(?:\"| )';
 				preg_match_all('/' . $pattern . '/', $htmlRaw, $fileList, PREG_PATTERN_ORDER);
@@ -108,8 +109,8 @@ class WebflowParser
 						if (!str_contains($file, ','))
 								$files[] = str_replace(['"', '&quot;)'], '', $file);
 
-				print '<- external fiiles: ' . sizeof($files) . PHP_EOL;
-				
+				print '<- external files: ' . sizeof($files) . PHP_EOL;
+
 				if (empty($files))
 						return $htmlRaw;
 
