@@ -15,7 +15,7 @@ class WebflowParser
     private static array $linksCrawled = [];
 		public static $filename = 'index';
 		public static $extension = '.html';
-		public static $dist = '/dist';
+		public static $dist = '.' . DIRECTORY_SEPARATOR . 'dist';
 
     public function __construct(string $site, string $host)
     {
@@ -24,13 +24,14 @@ class WebflowParser
 					self::$dist = rtrim($_SERVER['PWD'],self::$dist);
 				}
 
+
         self::$linkExtension = self::$extension;
         self::$site = str_contains($site, '/') ? explode('/', $site)[0] : $site;
         self::$host = $host ?? $site;
         self::$url = 'https://' . $site;
         print '-> Init scraping: ' . self::$url . PHP_EOL;
         self::checkFolder(self::$dist);
-        self::checkFolder(self::$dist . '/assets');
+        self::checkFolder(self::$dist . DIRECTORY_SEPARATOR . 'assets');
 
         $htmlRaw = self::getHtmlContent(self::$url);
         $htmlRaw = self::cleanup_html($htmlRaw);
@@ -38,7 +39,7 @@ class WebflowParser
         self::getLinks($htmlRaw);
         if (self::$configRemoveLinebreak) $htmlRaw = str_replace(array("    " . PHP_EOL, PHP_EOL), "", $htmlRaw);
 
-        file_put_contents(self::$dist . self::$filename . self::$linkExtension, $htmlRaw);
+        file_put_contents(self::$dist . DIRECTORY_SEPARATOR . self::$filename . self::$linkExtension, $htmlRaw);
 
         self::recursiveParsePages();
 
@@ -106,8 +107,8 @@ class WebflowParser
             $filename = str_replace(array(' ', '%20', '%40', '(', ')', 'webflow', 'sordahl'), '', end($filename));
             $filename = trim($filename, '. ');
 
-            if (!file_exists(self::$dist . '/assets/' . $filename)) {
-                print '<- Downloading: ' . $file . ' -> '.self::$dist . '/assets/' . $filename . PHP_EOL;
+            if (!file_exists(self::$dist . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . $filename)) {
+                print '<- Downloading: ' . $file . ' -> '.self::$dist . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . $filename . PHP_EOL;
 
                 $fileContent = file_get_contents($file, false, stream_context_create(self::$contextOptions));
 
@@ -168,7 +169,7 @@ class WebflowParser
                 $filename = self::renameLink($page);
                 self::getLinks($htmlRaw);
                 print '<- Saving file: ' . $filename . PHP_EOL;
-                file_put_contents(self::$dist . '/' . $filename, $htmlRaw);
+                file_put_contents(self::$dist . DIRECTORY_SEPARATOR . $filename, $htmlRaw);
                 self::$linksCrawled[] = $page;
 
                 print '<- Scraping done (' . $page . ')' . PHP_EOL;
