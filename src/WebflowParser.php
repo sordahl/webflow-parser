@@ -29,7 +29,7 @@ class WebflowParser
 
         $htmlRaw = self::getHtmlContent(self::$url);
         $htmlRaw = self::cleanup_html($htmlRaw);
-        $htmlRaw = self::downloadExternalAssets($htmlRaw);
+        self::downloadExternalAssets($htmlRaw);
         self::getLinks($htmlRaw);
         if (self::$configRemoveLinebreak) $htmlRaw = str_replace(array("    " . PHP_EOL, PHP_EOL), "", $htmlRaw);
 
@@ -157,7 +157,7 @@ class WebflowParser
                 $newPage = self::$url . '/' . $page;
                 $htmlRaw = self::getHtmlContent($newPage);
                 $htmlRaw = self::cleanup_html($htmlRaw);
-                $htmlRaw = self::downloadExternalAssets($htmlRaw);
+                self::downloadExternalAssets($htmlRaw);
                 $filename = self::renameLink($page);
                 self::getLinks($htmlRaw);
                 print '<- Saving file: ' . $filename . PHP_EOL;
