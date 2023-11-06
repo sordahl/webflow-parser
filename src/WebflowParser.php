@@ -17,10 +17,18 @@ class WebflowParser
 		public static $extension = '.html';
 		public static $dist = 'dist';
 
+		public static function getAbsolutePath() {
+			$scriptname = $_SERVER['SCRIPT_FILENAME'];
+			if (is_link($scriptname))
+				$scriptname = readlink($scriptname);
+			
+			return dirname(realpath($scriptname));
+		}
+
 		public function __construct(string $site, string $host)
 		{
 				//Set absolute dist path
-				self::$dist = dirname(realpath($_SERVER['PHP_SELF'])) . DIRECTORY_SEPARATOR . self::$dist;
+				self::$dist = self::getAbsolutePath() . DIRECTORY_SEPARATOR . self::$dist;
 				
 				self::$linkExtension = self::$extension;
 				self::$site = str_contains($site, '/') ? explode('/', $site)[0] : $site;
