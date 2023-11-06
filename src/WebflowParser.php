@@ -55,6 +55,7 @@ class WebflowParser
         $path = $folder;
         print '<- Check folder: ' . $folder . ' -> ' . $path . '... ';
         if ($path === false || !is_dir($path)) {
+					if (!is_dir($path)) print 'not path: ' . $path . PHP_EOL;
 					mkdir($folder);
 					$path = $folder;
 				}
