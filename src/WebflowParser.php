@@ -15,14 +15,17 @@ class WebflowParser
     private static array $linksCrawled = [];
 		public static $filename = 'index';
 		public static $extension = '.html';
-		public static $dist = '.' . DIRECTORY_SEPARATOR . 'dist';
+		public static $dist = DIRECTORY_SEPARATOR . 'dist';
 
     public function __construct(string $site, string $host)
     {
 				if (is_link($_SERVER['SCRIPT_FILENAME'])) {
 					print '-> running from symlinked file' . PHP_EOL;
-					self::$dist = rtrim($_SERVER['PWD'],self::$dist);
+					self::$dist = rtrim($_SERVER['PWD'], self::$dist) . self::$dist;
+				} else {
+						self::$dist = rtrim($_SERVER['PWD'], self::$dist) . self::$dist;
 				}
+				self::$dist = realpath(self::$dist);
 
 
         self::$linkExtension = self::$extension;
@@ -120,7 +123,7 @@ class WebflowParser
                     self::downloadExternalAssets($fileContent);
                 }
 
-                file_put_contents(self::$dist . '/assets/' . $filename, $fileContent);
+                file_put_contents(self::$dist . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . $filename, $fileContent);
                 print ' OK' . PHP_EOL;
             }
 
