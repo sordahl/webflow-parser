@@ -52,11 +52,11 @@ class WebflowParser
 
     private static function checkFolder($folder): void
     {
-        $path = realpath($folder);
-        print '<- Check folder: ' . $path . '... ';
+        $path = $folder;
+        print '<- Check folder: ' . $folder . ' -> ' . $path . '... ';
         if ($path === false || !is_dir($path)) {
 					mkdir($folder);
-					$path = realpath($folder);
+					$path = $folder;
 				}
 
         print (($path === false || !is_dir($path)) ? 'ERROR' : 'OK') . PHP_EOL;
