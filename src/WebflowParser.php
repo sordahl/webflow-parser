@@ -33,7 +33,7 @@ class WebflowParser
 				$htmlRaw = self::getHtmlContent(self::$url);
 				$htmlRaw = self::cleanup_html($htmlRaw);
 				$htmlRaw = self::downloadExternalAssets($htmlRaw);
-				exit;
+
 				self::getLinks($htmlRaw);
 				if (self::$configRemoveLinebreak) $htmlRaw = str_replace(array("    " . PHP_EOL, PHP_EOL), "", $htmlRaw);
 
