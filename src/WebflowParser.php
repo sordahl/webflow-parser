@@ -13,16 +13,19 @@ class WebflowParser
     private static int $maxDepth = 5;
     private static array $links = [];
     private static array $linksCrawled = [];
+		public static $filename = 'index';
+		public static $extension = '.html';
+		public static $dist = 'dist';
 
-    public function __construct(string $site, string $host, $filename = 'index', $extension = '.html')
+    public function __construct(string $site, string $host)
     {
-        self::$linkExtension = $extension;
+        self::$linkExtension = self::$extension;
         self::$site = str_contains($site, '/') ? explode('/', $site)[0] : $site;
         self::$host = $host ?? $site;
         self::$url = 'https://' . $site;
         print '-> Init scraping: ' . self::$url . PHP_EOL;
-        self::checkFolder('dist');
-        self::checkFolder('dist/assets');
+        self::checkFolder(self::$dist);
+        self::checkFolder(self::$dist . '/assets');
 
         $htmlRaw = self::getHtmlContent(self::$url);
         $htmlRaw = self::cleanup_html($htmlRaw);
@@ -30,7 +33,7 @@ class WebflowParser
         self::getLinks($htmlRaw);
         if (self::$configRemoveLinebreak) $htmlRaw = str_replace(array("    " . PHP_EOL, PHP_EOL), "", $htmlRaw);
 
-        file_put_contents('dist/' . $filename . self::$linkExtension, $htmlRaw);
+        file_put_contents('dist/' . self::$filename . self::$linkExtension, $htmlRaw);
 
         self::recursiveParsePages();
 

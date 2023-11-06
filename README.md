@@ -35,3 +35,5 @@ Copy this to `composer.json`
   }
 }
 ```
+
+copy the `tests/parse.php` file to your root and change site and host.
