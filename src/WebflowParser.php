@@ -105,7 +105,7 @@ class WebflowParser
 				preg_match_all('/' . $pattern . '/', $htmlRaw, $fileList, PREG_PATTERN_ORDER);
 
 				//Clean-up fileList in to $files array.
-				foreach ($fileList[1] as $file)
+				foreach ($fileList[0] as $file)
 						if (!str_contains($file, ','))
 								$files[] = str_replace(['"', '&quot;)'], '', $file);
 
