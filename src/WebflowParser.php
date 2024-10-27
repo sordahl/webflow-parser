@@ -16,6 +16,7 @@ class WebflowParser
 	public static $filename = 'index';
 	public static $extension = '.html';
 	public static $dist = 'dist';
+	public static $appendHTML = '';
 	public static $removeCharacters = ['Æ', 'æ', 'ø', 'Ø', 'å', 'Å', ' ', '%20', '%40', '(', ')', 'webflow', 'sordahl'];
 
 	public static function getAbsolutePath()
@@ -92,6 +93,7 @@ class WebflowParser
 
 		//Remove badge
 		$htmlRaw = str_replace('data-wf-domain="' . self::$site . '"', 'data-wf-domain="' . self::$host . '"', $htmlRaw);
+		if (self::$appendHTML) $htmlRaw = str_replace('</body>', self::$appendHTML . '</body>', $htmlRaw);
 		//$htmlRaw = preg_replace('/<a class=\"w-webflow-badge\"(.*)<\/a>/', '', $htmlRaw);
 
 		return $htmlRaw;
