@@ -18,5 +18,5 @@
 		"php": ">8.0",
 		"ext-zlib": "*"
 	},
-	"minimum-stability": "dev"
+	"minimum-stability": "stable"
 }
