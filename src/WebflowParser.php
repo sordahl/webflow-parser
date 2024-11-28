@@ -82,11 +82,7 @@ class WebflowParser
 			'/<!--(.|\s)*?-->/', //Remove comments
 			'/(<meta content="Webflow" name="generator"\/>)/',
 			'/\?site=([a-zA-Z0-9]+)/', //Remove ?site= param from script src
-			//'/<script type(.|\s)*?<\/script>/', //Remove javascript
-			//'/<style>(.)*\<\/style>/', //Remove styles
-			//'/ data\-wf\-(domain|page|site|status|ignore)="(.)*?"/', //Remove webflow data tags
-			//'/<script src=\"https:\/\/uploads-ssl.webflow.com\/(.)*(js\/webflow)(.)*\"><\/script>/', //Remove webflow javascript library.
-
+			'/\s(?:integrity|crossorigin)="[^"]*"/' //remove integrity and crossorigin from script
 		);
 		foreach ($patterns as $pattern)
 			$htmlRaw = preg_replace($pattern, '', $htmlRaw);
@@ -94,7 +90,6 @@ class WebflowParser
 		//Remove badge
 		$htmlRaw = str_replace('data-wf-domain="' . self::$site . '"', 'data-wf-domain="' . self::$host . '"', $htmlRaw);
 		if (self::$appendHTML) $htmlRaw = str_replace('</body>', self::$appendHTML . '</body>', $htmlRaw);
-		//$htmlRaw = preg_replace('/<a class=\"w-webflow-badge\"(.*)<\/a>/', '', $htmlRaw);
 
 		return $htmlRaw;
 	}
@@ -102,16 +97,19 @@ class WebflowParser
 	public static function downloadExternalAssets($htmlRaw)
 	{
 		$files = [];
-		//$pattern = '(https:\/\/(?:assets-global.website-files.com)\/(?:.*?))(?:\"| )';
 		$pattern = 'https:\/\/[^"]*\/[^"]*\.[^"]+'; //must contain / after domain and punctuation (ext)
-		//$pattern = '(https:\/\/(?:.*?))(?:\"| )';
-		//$pattern = '(https:\/\/(?:.*?)\/(?:.*?)\.(?:.*?))(?:\"| )';
 		preg_match_all('/' . $pattern . '/', $htmlRaw, $fileList, PREG_PATTERN_ORDER);
 
 		//Clean-up fileList in to $files array.
-		foreach ($fileList[0] as $file)
-			if (!str_contains($file, ','))
-				$files[] = str_replace(['"', '&quot;)'], '', $file);
+		foreach ($fileList[0] as $file) {
+			$file = str_replace(['"', '&quot;)'], '', $file);
+			$files = array_merge($files, explode(' ', $file));
+		}
+
+		//Remove non-valid urls
+		$files = array_filter($files, function ($url) {
+			return filter_var($url, FILTER_VALIDATE_URL);
+		});
 
 		print '<- external files: ' . sizeof($files) . PHP_EOL;
 
