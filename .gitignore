@@ -1,1 +1,5 @@
-/vendor/
+vendor/
+*.env
+.DS_Store
+dist-locale/json/*
+dist/json/*

@@ -1,6 +1,6 @@
 {
 	"name": "sordahl/webflow-parser",
-	"description": "Webflow site parser to static html with local assets",
+	"description": "Webflow site parser to static html with local assets and translations",
 	"type": "library",
 	"autoload": {
 		"psr-4": {
@@ -14,8 +14,11 @@
 		}
 	],
 	"require": {
-		"php": ">8.0",
+		"php": "^8.3",
 		"ext-zlib": "*"
+	},
+	"config": {
+		"optimize-autoloader": true
 	},
 	"minimum-stability": "stable",
 	"license": "MIT"
