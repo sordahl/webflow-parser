@@ -1,6 +1,6 @@
 <?php
 
-namespace HiFriday\WebflowLocale;
+namespace Sordahl\WebflowParser;
 
 /**
  * Main orchestrator class for fetching and generating locale-specific Webflow pages

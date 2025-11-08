@@ -1,8 +1,8 @@
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-use HiFriday\WebflowLocale\SiteGenerator;
-use HiFriday\WebflowLocale\EnvLoader;
+use Sordahl\WebflowParser\SiteGenerator;
+use Sordahl\WebflowParser\EnvLoader;
 
 EnvLoader::load(__DIR__ . '/.env');
 

@@ -11,7 +11,7 @@
 require_once(__DIR__ . '/vendor/autoload.php');
 require_once(__DIR__ . '/.env');
 
-use HiFriday\WebflowLocale\WebflowApiClient;
+use Sordahl\WebflowParser\WebflowApiClient;
 
 // Load environment variables
 function loadEnv(string $path): void

@@ -1,6 +1,6 @@
 <?php
 
-namespace HiFriday\WebflowLocale;
+namespace Sordahl\WebflowParser;
 
 /**
  * Generates sitemap.xml and robots.txt files for SEO

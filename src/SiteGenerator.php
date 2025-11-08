@@ -1,6 +1,6 @@
 <?php
 
-namespace HiFriday\WebflowLocale;
+namespace Sordahl\WebflowParser;
 
 use Exception;
 

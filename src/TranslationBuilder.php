@@ -1,6 +1,6 @@
 <?php
 
-namespace HiFriday\WebflowLocale;
+namespace Sordahl\WebflowParser;
 
 /**
  * Builds translation maps by comparing default and locale JSON structures
