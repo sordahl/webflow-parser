@@ -53,30 +53,26 @@ if (!$apiKey) {
 // Configuration
 $config = [
     'apiKey' => $apiKey,
-    'siteId' => '670f6126b73b3a75c012622d',
-    'hostUrl' => 'https://hifriday.app',
+    'siteId' => '<webflow-site-id>',
+    'hostUrl' => 'https://example.com',
     'outputDir' => __DIR__ . '/dist',
 
     // Pages to exclude by ID (should match generate-locale-pages.php)
-    'excludePageIds' => [
-        '671d6147172df4affd2ed334',
-        '670f6126b73b3a75c0126239',
-        '67cd6669aebf7cd8319e7d26'
-    ],
+    'excludePageIds' => [],
 
     // Supported locales
-    'locales' => [
-        [
-            'id' => '67f6606ec021083df0d9dd7b',
-            'tag' => 'en',
-            'primary' => true
-        ],
-        [
-            'id' => '6884aa16f9d276ff52ab35fd',
-            'tag' => 'da',
-            'primary' => false
-        ]
-    ]
+    // 'locales' => [
+    //     [
+    //         'id' => '67f6606ec021083df0d9dd7b',
+    //         'tag' => 'en',
+    //         'primary' => true
+    //     ],
+    //     [
+    //         'id' => '6884aa16f9d276ff52ab35fd',
+    //         'tag' => 'da',
+    //         'primary' => false
+    //     ]
+    // ]
 ];
 
 try {
@@ -149,7 +145,6 @@ try {
     }
 
     echo "Generation completed successfully!" . PHP_EOL;
-
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . PHP_EOL;
     echo $e->getTraceAsString() . PHP_EOL;
@@ -161,7 +156,7 @@ try {
  */
 function generateRobotsTxt(string $hostUrl): string
 {
-    $content = "# hifriday.com robots.txt\n";
+    $content = "# " . $hostUrl . " robots.txt\n";
     $content .= "# Generated on " . date('Y-m-d H:i:s') . "\n\n";
     $content .= "User-agent: *\n";
     $content .= "Allow: /\n\n";

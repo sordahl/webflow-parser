@@ -1,4 +1,4 @@
-# HiFriday Website Generator
+# Webflow Website Generator
 
 A comprehensive PHP-based static site generator for Webflow sites with multi-language support, automatic sitemap generation, and SEO optimization.
 
@@ -101,11 +101,11 @@ Edit the `$config` array in `generate-site.php`:
 ```php
 $config = [
     'apiKey' => $apiKey,                              // From .env file
-    'siteId' => '670f6126b73b3a75c012622d',          // Your Webflow site ID
-    'siteUrl' => 'https://hifriday.webflow.io',      // Webflow staging URL
-    'hostUrl' => 'https://hifriday.app',             // Your production domain
-    'outputDir' => __DIR__ . '/dist',                // Output directory
-    'site_name' => 'Friday™',                        // For og:site_name meta tag
+    'siteId' => '<webflow-site-id>',                  // Your Webflow site ID
+    'siteUrl' => 'https://example.webflow.io',        // Webflow staging URL
+    'hostUrl' => 'https://example.com',               // Your production domain
+    'outputDir' => __DIR__ . '/dist',                 // Output directory
+    'site_name' => 'SiteName',                         // For og:site_name meta tag
 
     // Options
     'fetchContent' => true,      // Fetch JSON DOM structure
@@ -114,9 +114,7 @@ $config = [
     'minifyInline' => true,      // Minify inline styles and scripts
 
     // Pages to exclude by ID
-    'excludePageIds' => [
-        '671d6147172df4affd2ed334',  // Old test pages
-    ],
+    'excludePageIds' => [],
 ];
 ```
 
@@ -156,7 +154,7 @@ private function detectLocales(array $pages): array
 The generator automatically adds `og:site_name` meta tags to all pages (both primary and translated). Configure it in `generate-site.php`:
 
 ```php
-'site_name' => 'Friday™',  // Appears as <meta property="og:site_name" content="Friday™">
+'site_name' => 'SiteName',  // Appears as <meta property="og:site_name" content="SiteName">
 ```
 
 ### Hreflang Attributes
@@ -165,10 +163,10 @@ All pages automatically get proper hreflang alternate links for SEO:
 
 ```html
 <!-- Primary page links to Danish -->
-<link rel="alternate" hreflang="da" href="https://hifriday.app/da/" />
+<link rel="alternate" hreflang="da" href="https://example.com/da/" />
 
 <!-- Danish page links back to primary -->
-<link rel="alternate" hreflang="en" href="https://hifriday.app/" />
+<link rel="alternate" hreflang="en" href="https://exampple.come/" />
 ```
 
 ### Inline Minification
@@ -273,4 +271,4 @@ This project uses concepts from [WebflowParser](https://github.com/sordahl/webfl
 
 ## License
 
-Proprietary - HiFriday
+Proprietary - Sordahl ApS

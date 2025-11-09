@@ -54,8 +54,8 @@ if (!$apiKey) {
 // Configuration
 $config = [
     'apiKey' => $apiKey,
-    'siteUrl' => 'https://hifriday.webflow.io',
-    'hostUrl' => 'https://hifriday.app', // Your custom domain
+    'siteUrl' => 'https://example.webflow.io',
+    'hostUrl' => 'https://example.com', // Your custom domain
     'outputDir' => __DIR__ . '/dist',
     'jsonDir' => __DIR__ . '/dist/json',
     'assetsDir' => __DIR__ . '/dist/assets',
@@ -65,14 +65,10 @@ $config = [
     'fetchHtml' => true,     // Fetch rendered HTML
     'downloadAssets' => true, // Download external assets
     'minifyInline' => true,  // Minify inline styles and scripts
-    'site_name' => 'Friday™', // Site name for og:site_name meta tag
+    'site_name' => 'Example', // Site name for og:site_name meta tag
 
     // Pages to exclude by ID
-    'excludePageIds' => [
-        '671d6147172df4affd2ed334',
-        '670f6126b73b3a75c0126239',
-        '67cd6669aebf7cd8319e7d26'
-    ],
+    'excludePageIds' => [],
 ];
 
 try {
