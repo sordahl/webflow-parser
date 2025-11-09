@@ -3,4 +3,4 @@ vendor/
 .DS_Store
 dist-locale/json/*
 dist/json/*
-dist/*
+dist
