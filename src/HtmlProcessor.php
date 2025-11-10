@@ -39,21 +39,15 @@ class HtmlProcessor
             '/\s(?:integrity|crossorigin)="[^"]*"/' // Remove integrity and crossorigin from script
         ];
 
-        foreach ($patterns as $pattern) {
+        foreach ($patterns as $pattern)
             $html = preg_replace($pattern, '', $html);
-        }
 
-        // Replace site domain with host domain
-        $siteDomain = parse_url($this->siteUrl, PHP_URL_HOST);
-        $hostDomain = parse_url($this->hostUrl, PHP_URL_HOST);
-
-        if ($siteDomain && $hostDomain) {
-            $html = str_replace(
-                'data-wf-domain="' . $siteDomain . '"',
-                'data-wf-domain="' . $hostDomain . '"',
-                $html
-            );
-        }
+        // Replace site branding
+        $html = str_replace(
+            'data-wf-domain="' . $this->siteUrl . '"',
+            'data-wf-domain="' . $this->hostUrl . '"',
+            $html
+        );
 
         return $html;
     }
