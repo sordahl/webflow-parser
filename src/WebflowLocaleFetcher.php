@@ -275,8 +275,11 @@ class WebflowLocaleFetcher
 
             echo "Processing: " . ($page['title'] ?? 'N/A') . " (Primary: $localeTag)" . PHP_EOL;
 
+            // Get the published path for this page
+            $publishedPath = $page['publishedPath'] ?? '/';
+
             // Fetch HTML from published site
-            $html = $this->apiClient->getPublishedHtml($this->siteUrl, '');
+            $html = $this->apiClient->getPublishedHtml($this->siteUrl, $publishedPath);
 
             if (!$html) {
                 echo "  Warning: Failed to fetch HTML" . PHP_EOL;
@@ -303,7 +306,6 @@ class WebflowLocaleFetcher
             $html = $this->htmlProcessor->addSiteNameMeta($html);
 
             // Fix relative paths for primary HTML
-            $publishedPath = $page['publishedPath'] ?? '/';
             $html = $this->htmlProcessor->fixRelativePaths($html, $publishedPath);
 
             // Append HTML before </body> tag if configured
