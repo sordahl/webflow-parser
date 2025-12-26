@@ -17,8 +17,14 @@ $config = [
 	'publicDir' => __DIR__ . '/public',
 
 	'site_name' => 'Track Growth',
-	'appendBeforeBody' => '<script src="/assets/analytics.js" async defer></script>',
+	// 'appendBeforeBody' => '<script src="/assets/analytics.js" async defer></script>',
 	'excludePageIds' => [],
+
+	// URLs matching these patterns will not be downloaded/replaced
+	// Supports * wildcard for pattern matching
+	'preserveScriptSources' => [
+		'https://cdn.trackgrowth.app/*',
+	],
 ];
 
 $generator = (new SiteGenerator($config))->generate();

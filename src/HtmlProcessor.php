@@ -12,13 +12,19 @@ class HtmlProcessor
     private string $hostUrl;
     private string $assetsDir;
     private string $siteName;
+    /** @var array<string> URL patterns to preserve (not download/replace) */
+    private array $preserveScriptSources;
 
-    public function __construct(string $siteUrl, string $hostUrl, string $assetsDir, string $siteName = '')
+    /**
+     * @param array<string> $preserveScriptSources URL patterns to preserve (supports * wildcard)
+     */
+    public function __construct(string $siteUrl, string $hostUrl, string $assetsDir, string $siteName = '', array $preserveScriptSources = [])
     {
         $this->siteUrl = rtrim($siteUrl, '/');
         $this->hostUrl = rtrim($hostUrl, '/');
         $this->assetsDir = $assetsDir;
         $this->siteName = $siteName;
+        $this->preserveScriptSources = $preserveScriptSources;
 
         // Create assets directory if it doesn't exist
         if (!is_dir($this->assetsDir)) {
@@ -148,6 +154,11 @@ class HtmlProcessor
         // Remove non-valid URLs
         $files = array_filter($files, function ($url) {
             return filter_var($url, FILTER_VALIDATE_URL);
+        });
+
+        // Filter out preserved URLs
+        $files = array_filter($files, function ($url) {
+            return !$this->shouldPreserveUrl($url);
         });
 
         if (empty($files)) {
@@ -366,6 +377,27 @@ class HtmlProcessor
         $filename = trim($filename, '. ');
 
         return $filename;
+    }
+
+    /**
+     * Check if a URL should be preserved (not downloaded/replaced)
+     */
+    private function shouldPreserveUrl(string $url): bool
+    {
+        foreach ($this->preserveScriptSources as $pattern) {
+            // Convert glob-style pattern to regex
+            $regex = '/^' . str_replace(
+                ['\\*', '\\?'],
+                ['.*', '.'],
+                preg_quote($pattern, '/')
+            ) . '$/';
+
+            if (preg_match($regex, $url)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

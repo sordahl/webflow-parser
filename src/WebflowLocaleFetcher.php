@@ -34,7 +34,8 @@ class WebflowLocaleFetcher
             $config['siteUrl'],
             $config['hostUrl'] ?? $config['siteUrl'],
             $config['assetsDir'] ?? $config['outputDir'] . '/assets',
-            $config['site_name'] ?? ''
+            $config['site_name'] ?? '',
+            $config['preserveScriptSources'] ?? []
         );
 
         $this->localeGenerator = new LocaleGenerator(

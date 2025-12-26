@@ -35,6 +35,7 @@ class SiteGenerator
      *   - site_name: Site name for og:site_name meta tag (optional)
      *   - appendBeforeBody: HTML to append before </body> tag (optional)
      *   - excludePageIds: Array of page IDs to exclude (optional)
+     *   - preserveScriptSources: Array of URL patterns to preserve (optional, supports * wildcard)
      */
     public function __construct(array $config)
     {
