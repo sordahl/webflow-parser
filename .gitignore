@@ -4,3 +4,4 @@ vendor/
 dist-locale/json/*
 dist/json/*
 dist
+site_*
