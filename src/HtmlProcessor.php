@@ -801,6 +801,17 @@ class HtmlProcessor
         $html = str_replace('src="./assets/', 'src="' . $prefix . 'assets/', $html);
         $html = str_replace('href="./assets/', 'href="' . $prefix . 'assets/', $html);
 
+        // Fix asset paths in srcset attributes
+        $html = preg_replace_callback(
+            '/srcset="([^"]+)"/',
+            function ($matches) use ($prefix) {
+                $srcset = $matches[1];
+                $srcset = str_replace('./assets/', $prefix . 'assets/', $srcset);
+                return 'srcset="' . $srcset . '"';
+            },
+            $html
+        );
+
         // Fix asset paths in data attributes (e.g., data-poster-url, data-video-urls)
         $html = preg_replace_callback(
             '/data-[^=]+=("|\')\.\/assets\/([^"\']+)\1/',
