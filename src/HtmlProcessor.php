@@ -142,13 +142,17 @@ class HtmlProcessor
     public function downloadExternalAssets(string $html): string
     {
         $files = [];
-        $pattern = 'https:\/\/[^"]*\/[^"]*\.[^"]+';
-        preg_match_all('/' . $pattern . '/', $html, $fileList, PREG_PATTERN_ORDER);
+        // Pattern captures CDN URLs with specific file extensions
+        // Handles spaces in filenames and stops at commas for srcset/video sources
+        $pattern = 'https:\/\/cdn[^",]*\.(jpg|jpeg|png|gif|webp|svg|mp4|webm|css|js|woff2?|ttf|eot|pdf|ico)';
+        preg_match_all('/' . $pattern . '/i', $html, $fileList, PREG_PATTERN_ORDER);
 
         // Clean up fileList into $files array
         foreach ($fileList[0] as $file) {
-            $file = str_replace(['"', '&quot;)'], '', $file);
-            $files = array_merge($files, explode(' ', $file));
+            $file = str_replace(['"', '&quot;)', '&quot;'], '', $file);
+            // URL-encode any unencoded spaces in the URL
+            $file = str_replace(' ', '%20', $file);
+            $files[] = $file;
         }
 
         // Remove non-valid URLs
@@ -170,7 +174,7 @@ class HtmlProcessor
         foreach ($files as $file) {
             // Get just the filename without path for sanitization
             $urlPath = parse_url($file, PHP_URL_PATH);
-            $filename = $this->sanitizeFilename(basename($urlPath));
+            $filename = $this->sanitizeFilename(basename(urldecode($urlPath)));
 
             $assetPath = $this->assetsDir . DIRECTORY_SEPARATOR . $filename;
 
@@ -198,7 +202,13 @@ class HtmlProcessor
                 file_put_contents($assetPath, $fileContent);
             }
 
+            // Replace both encoded and unencoded versions of the URL in HTML
             $html = str_replace($file, './assets/' . $filename, $html);
+            // Also replace the unencoded version (with spaces instead of %20)
+            $fileWithSpaces = str_replace('%20', ' ', $file);
+            if ($fileWithSpaces !== $file) {
+                $html = str_replace($fileWithSpaces, './assets/' . $filename, $html);
+            }
         }
 
         return $html;
